@@ -1,18 +1,17 @@
 import tkinter as tk
 from tkinter import simpledialog, messagebox
 from sympy import parse_expr, integrate, pi, symbols
-from volumen import (
+from total import (
     calcular_area,
     calcular_area_entre_funciones,
-    calcular_volumen_proyeccion,
     mostrar_graficas_2d,
     mostrar_volumen_3d,
     mostrar_volumen_entre_funciones_3d
 )
 
-x = symbols('x')  # variable global para evaluar funciones
+x = symbols('x')  # variable global
 
-
+# --- Área bajo una curva ---
 def opcion_area_bajo_curva():
     try:
         f_str = simpledialog.askstring("Función", "Ingresa la función f(x):")
@@ -25,6 +24,7 @@ def opcion_area_bajo_curva():
     except Exception as e:
         messagebox.showerror("Error", f"Ocurrió un error: {e}")
 
+# --- Área entre dos funciones ---
 def opcion_area_entre_funciones():
     try:
         f_str = simpledialog.askstring("Función f(x)", "Ingresa la primera función f(x):")
@@ -39,19 +39,28 @@ def opcion_area_entre_funciones():
     except Exception as e:
         messagebox.showerror("Error", f"Ocurrió un error: {e}")
 
+# --- Volumen generado por una sola función ---
 def opcion_volumen_una_funcion():
     try:
-        f_str = simpledialog.askstring("Función", "Ingresa la función f(x):")
+        f_str = simpledialog.askstring("Función", "Ingresa la función f(x) o f(y):")
         a = float(simpledialog.askstring("Límite inferior", "Ingresa a:"))
         b = float(simpledialog.askstring("Límite superior", "Ingresa b:"))
-        eje = simpledialog.askstring("Eje", "¿Eje de revolución? (x o y):").strip().lower()
+        eje = simpledialog.askstring("Eje de revolución", "¿Eje de revolución? (x o y):").strip().lower()
         f_expr = parse_expr(f_str)
-        volumen = calcular_volumen_proyeccion(f_expr, a, b)
+        if eje == 'x':
+            volumen = integrate(pi * f_expr**2, (x, a, b))
+        elif eje == 'y':
+            y = symbols('y')
+            f_expr = parse_expr(f_str, local_dict={'y': y})
+            volumen = integrate(pi * f_expr**2, (y, a, b))
+        else:
+            raise ValueError("Eje no válido. Usa 'x' o 'y'.")
         messagebox.showinfo("Resultado", f"Volumen ≈ {float(volumen):.5f}")
         mostrar_volumen_3d(f_expr, a, b, eje=eje)
     except Exception as e:
         messagebox.showerror("Error", f"Ocurrió un error: {e}")
 
+# --- Volumen entre dos funciones ---
 def opcion_volumen_entre_funciones():
     try:
         f_str = simpledialog.askstring("Función exterior", "Ingresa f(x):")
@@ -68,6 +77,7 @@ def opcion_volumen_entre_funciones():
     except Exception as e:
         messagebox.showerror("Error", f"Ocurrió un error: {e}")
 
+# --- Menú principal ---
 def crear_menu():
     ventana = tk.Tk()
     ventana.title("Cálculo de Integrales Definidas")
