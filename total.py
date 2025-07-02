@@ -23,7 +23,7 @@ def evaluar_funcion_segura(expr, valores, var):
     return resultado
 
 # --- Visualización 2D ---
-def mostrar_graficas_2d(f_expr, a, b, mostrar_area=True, eje='x', g_expr=None):
+def mostrar_graficas_2d(f_expr, a, b, mostrar_area=True, eje='x', g_expr=None, mensaje_area=None):
     fig, axs = plt.subplots(1, 2, figsize=(12, 5))
 
     x_vals = np.linspace(float(a) - 1, float(b) + 1, 500)
@@ -60,9 +60,17 @@ def mostrar_graficas_2d(f_expr, a, b, mostrar_area=True, eje='x', g_expr=None):
     axs[1].set_ylabel("y")
     axs[1].grid(True)
     axs[1].legend()
+
+    # 👇 Mostrar el mensaje dentro del gráfico (como recuadro de texto)
+    if mensaje_area:
+        axs[1].text(0.5, 0.95, mensaje_area,
+                    transform=axs[1].transAxes,
+                    fontsize=12,
+                    ha='center',
+                    bbox=dict(boxstyle="round", facecolor="white", edgecolor="black"))
+
     plt.tight_layout()
     plt.show()
-
 # --- Visualización 3D entre dos funciones eje X o Y ---
 def mostrar_volumen_entre_funciones_3d(f_expr, g_expr, a, b, eje='x'):
     theta = np.linspace(0, 2 * np.pi, 100)

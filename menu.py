@@ -19,11 +19,12 @@ def opcion_area_bajo_curva():
         b = float(simpledialog.askstring("Límite superior", "Ingresa b:"))
         f_expr = parse_expr(f_str, local_dict={'x': x, 'y': y})
         area = calcular_area(f_expr, a, b)
-        messagebox.showinfo("Resultado", f"Área ≈ {float(area):.5f}")
-        mostrar_graficas_2d(f_expr, a, b, mostrar_area=True)
+        
+        mensaje = f"Área bajo la curva en [{a}, {b}] ≈ {float(area):.5f}"
+        mostrar_graficas_2d(f_expr, a, b, mostrar_area=True, mensaje_area=mensaje)
+
     except Exception as e:
         messagebox.showerror("Error", f"Ocurrió un error: {e}")
-
 # --- Área entre dos funciones ---
 def opcion_area_entre_funciones():
     try:
