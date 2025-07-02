@@ -23,7 +23,7 @@ def evaluar_funcion_segura(expr, valores, var):
     return resultado
 
 # --- Visualización 2D ---
-def mostrar_graficas_2d(f_expr, a, b, mostrar_area=True, eje='x', g_expr=None):
+def mostrar_graficas_2d(f_expr, a, b, mostrar_area=True, eje='x', g_expr=None, mensaje_area=None):
     fig, axs = plt.subplots(1, 2, figsize=(12, 5))
 
     x_vals = np.linspace(float(a) - 1, float(b) + 1, 500)
@@ -60,52 +60,53 @@ def mostrar_graficas_2d(f_expr, a, b, mostrar_area=True, eje='x', g_expr=None):
     axs[1].set_ylabel("y")
     axs[1].grid(True)
     axs[1].legend()
+
+    # 👇 Mostrar el mensaje dentro del gráfico (como recuadro de texto)
+    if mensaje_area:
+        axs[1].text(0.5, 0.95, mensaje_area,
+                    transform=axs[1].transAxes,
+                    fontsize=12,
+                    ha='center',
+                    bbox=dict(boxstyle="round", facecolor="white", edgecolor="black"))
+
     plt.tight_layout()
     plt.show()
-
 # --- Visualización 3D entre dos funciones eje X o Y ---
 def mostrar_volumen_entre_funciones_3d(f_expr, g_expr, a, b, eje='x'):
     theta = np.linspace(0, 2 * np.pi, 100)
     vals = np.linspace(float(a), float(b), 100)
+    var = x if eje == 'x' else y
+
+    f_vals = evaluar_funcion_segura(f_expr, vals, var)
+    g_vals = evaluar_funcion_segura(g_expr, vals, var)
+    grid, theta_grid = np.meshgrid(vals, theta)
+    f_grid, _ = np.meshgrid(f_vals, theta)
+    g_grid, _ = np.meshgrid(g_vals, theta)
 
     if eje == 'x':
-        f_vals = evaluar_funcion_segura(f_expr, vals, x)
-        g_vals = evaluar_funcion_segura(g_expr, vals, x)
-        grid, theta_grid = np.meshgrid(vals, theta)
-        f_grid, _ = np.meshgrid(f_vals, theta)
-        g_grid, _ = np.meshgrid(g_vals, theta)
-
         X = grid
         Y_outer = f_grid * np.cos(theta_grid)
         Z_outer = f_grid * np.sin(theta_grid)
         Y_inner = g_grid * np.cos(theta_grid)
         Z_inner = g_grid * np.sin(theta_grid)
-
-        fig = plt.figure(figsize=(10, 6))
-        ax = fig.add_subplot(111, projection='3d')
-        ax.plot_surface(X, Y_outer, Z_outer, color='pink', alpha=0.7)
-        ax.plot_surface(X, Y_inner, Z_inner, color='yellow', alpha=1.0, edgecolor='none')
-        ax.set_title(f"Sólido 3D entre f(x) y g(x) por revolución (eje X)")
-
-    elif eje == 'y':
-        f_vals = evaluar_funcion_segura(f_expr, vals, y)
-        g_vals = evaluar_funcion_segura(g_expr, vals, y)
-        grid, theta_grid = np.meshgrid(vals, theta)
-        f_grid, _ = np.meshgrid(f_vals, theta)
-        g_grid, _ = np.meshgrid(g_vals, theta)
-
+    else:
+        Y = grid
         X_outer = f_grid * np.cos(theta_grid)
         Z_outer = f_grid * np.sin(theta_grid)
         X_inner = g_grid * np.cos(theta_grid)
         Z_inner = g_grid * np.sin(theta_grid)
-        Y = grid
 
-        fig = plt.figure(figsize=(10, 6))
-        ax = fig.add_subplot(111, projection='3d')
+    fig = plt.figure(figsize=(10, 6))
+    ax = fig.add_subplot(111, projection='3d')
+
+    if eje == 'x':
+        ax.plot_surface(X, Y_outer, Z_outer, color='pink', alpha=0.7)
+        ax.plot_surface(X, Y_inner, Z_inner, color='yellow', alpha=1.0, edgecolor='none')
+    else:
         ax.plot_surface(X_outer, Y, Z_outer, color='pink', alpha=0.7)
         ax.plot_surface(X_inner, Y, Z_inner, color='yellow', alpha=1.0, edgecolor='none')
-        ax.set_title(f"Sólido 3D entre f(y) y g(y) por revolución (eje Y)")
 
+    ax.set_title(f"Sólido 3D entre f({eje}) y g({eje}) por revolución (eje {eje})")
     ax.set_xlabel("x")
     ax.set_ylabel("y")
     ax.set_zlabel("z")
@@ -115,11 +116,12 @@ def mostrar_volumen_entre_funciones_3d(f_expr, g_expr, a, b, eje='x'):
 # --- Visualización 3D de una sola función ---
 def mostrar_volumen_3d(f_expr, a, b, eje='x'):
     theta = np.linspace(0, 2 * np.pi, 100)
+    var = x if eje == 'x' else y
 
     if eje == 'x':
         x_vals = np.linspace(float(a), float(b), 100)
         x_grid, theta_grid = np.meshgrid(x_vals, theta)
-        r_vals = evaluar_funcion_segura(f_expr, x_vals, x)
+        r_vals = evaluar_funcion_segura(f_expr, x_vals, var)
         r_grid, _ = np.meshgrid(r_vals, theta)
 
         X = x_grid
@@ -129,7 +131,7 @@ def mostrar_volumen_3d(f_expr, a, b, eje='x'):
     elif eje == 'y':
         y_vals = np.linspace(float(a), float(b), 100)
         y_grid, theta_grid = np.meshgrid(y_vals, theta)
-        r_vals = evaluar_funcion_segura(f_expr, y_vals, y)
+        r_vals = evaluar_funcion_segura(f_expr, y_vals, var)
         r_grid, _ = np.meshgrid(r_vals, theta)
 
         X = r_grid * np.cos(theta_grid)
