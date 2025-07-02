@@ -126,8 +126,8 @@ def mostrar_volumen_entre_funciones_3d(f_expr, g_expr, a, b, eje='x'):
 
     fig = plt.figure(figsize=(10, 6))
     ax = fig.add_subplot(111, projection='3d')
-    ax.plot_surface(X, Y_outer, Z_outer, color='limegreen', alpha=0.7)
-    ax.plot_surface(X, Y_inner, Z_inner, color='white', alpha=1.0, edgecolor='none')
+    ax.plot_surface(X, Y_outer, Z_outer, color='pink', alpha=0.7)
+    ax.plot_surface(X, Y_inner, Z_inner, color='yellow', alpha=1.0, edgecolor='none')
 
     ax.set_title(f"Sólido 3D entre f(x) y g(x) por revolución")
     ax.set_xlabel("x")
@@ -199,5 +199,5 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
-#afklsafgjmsjafsjafsafsj
+
+
