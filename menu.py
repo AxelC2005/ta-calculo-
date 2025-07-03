@@ -124,7 +124,7 @@ def crear_menu():
             command=comando,
             width=35,
             height=2,
-            bg="#a294ec",
+            bg="#bbb0f0",
             fg="black",
             font=("Arial", 12 , "bold")
         ).pack(pady=8)
