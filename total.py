@@ -63,7 +63,7 @@ def mostrar_graficas_2d(f_expr, a, b, mostrar_area=True, eje='x', g_expr=None, m
 
     # 👇 Mostrar el mensaje en la parte inferior del gráfico
     if mensaje_area:
-        axs[1].text(0.0, 0.01, mensaje_area,
+        axs[1].text(0.5, 0.05, mensaje_area,
                     transform=axs[1].transAxes,
                     fontsize=12,
                     ha='center',
