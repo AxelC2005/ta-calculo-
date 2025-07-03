@@ -112,8 +112,8 @@ def crear_menu():
     botones = [
         ("Área bajo una curva", opcion_area_bajo_curva),
         ("Área entre dos funciones", opcion_area_entre_funciones),
-        ("Sólido de revolución 3D (una función)", opcion_volumen_una_funcion),
-        ("Sólido de revolución 3D (entre dos funciones)", opcion_volumen_entre_funciones),
+        ("Sólido de revolución (una función)", opcion_volumen_una_funcion),
+        ("Sólido de revolución (entre dos funciones)", opcion_volumen_entre_funciones),
         ("Salir", ventana.destroy)
     ]
 
