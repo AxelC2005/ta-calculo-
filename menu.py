@@ -100,13 +100,13 @@ def crear_menu():
     ventana = tk.Tk()
     ventana.title("Cálculo de Integrales Definidas")
     ventana.geometry("400x420")
-    ventana.config(bg="#10eb1b")
+    ventana.config(bg="#c8f8cb")
 
     tk.Label(
         ventana,
         text="Selecciona una operación:",
         font=("Arial", 16, "bold"),
-        bg="#10eb1b",
+        bg="#c8f8cb",
     ).pack(pady=20)
 
     botones = [
@@ -124,7 +124,7 @@ def crear_menu():
             command=comando,
             width=35,
             height=2,
-            bg="#ffc0cb",
+            bg="#a294ec",
             fg="black",
             font=("Arial", 12 , "bold")
         ).pack(pady=8)
