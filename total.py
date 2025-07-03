@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from sympy import symbols, integrate, parse_expr, pi, Abs
+from sympy import symbols, integrate, parse_expr,latex, pi, Abs
 from mpl_toolkits.mplot3d import Axes3D
 
 x, y = symbols('x y')
@@ -34,18 +34,18 @@ def mostrar_graficas_2d(f_expr, a, b, mostrar_area=True, eje='x', g_expr=None, m
     f_area = evaluar_funcion_segura(f_expr, x_area, x)
     g_area = evaluar_funcion_segura(g_expr, x_area, x) if g_expr else None
 
-    axs[0].plot(x_vals, f_vals, color='blue', label=f'f(x) = {f_expr}')
+    axs[0].plot(x_vals, f_vals, color='blue', label=fr'$f(x) = {latex(f_expr)}$')
     if g_expr:
-        axs[0].plot(x_vals, g_vals, color='red', linestyle='--', label=f'g(x) = {g_expr}')
+        axs[0].plot(x_vals, g_vals, color='red', linestyle='--',label=fr'$g(x) = {latex(g_expr)}$')
     axs[0].set_title("Funciones sin área")
     axs[0].set_xlabel("x")
     axs[0].set_ylabel("y")
     axs[0].grid(True)
     axs[0].legend()
 
-    axs[1].plot(x_vals, f_vals, color='blue', label=f'f(x) = {f_expr}')
+    axs[1].plot(x_vals, f_vals, color='blue', label=fr'$f(x) = {latex(f_expr)}$')
     if g_expr:
-        axs[1].plot(x_vals, g_vals, color='red', linestyle='--', label=f'g(x) = {g_expr}')
+        axs[1].plot(x_vals, g_vals, color='red', linestyle='--', label=fr'$g(x) = {latex(g_expr)}$')
         axs[1].fill_between(x_area, f_area, g_area, color='violet', alpha=0.5, label="Área entre funciones")
         axs[1].set_title("Área entre f(x) y g(x)")
     else:
@@ -59,11 +59,11 @@ def mostrar_graficas_2d(f_expr, a, b, mostrar_area=True, eje='x', g_expr=None, m
     axs[1].set_xlabel("x")
     axs[1].set_ylabel("y")
     axs[1].grid(True)
-    axs[1].legend()
+    axs[1].legend(loc='upper center')
 
-    # 👇 Mostrar el mensaje dentro del gráfico (como recuadro de texto)
+    # 👇 Mostrar el mensaje en la parte inferior del gráfico
     if mensaje_area:
-        axs[1].text(0.5, 0.95, mensaje_area,
+        axs[1].text(0.5, 0.05, mensaje_area,
                     transform=axs[1].transAxes,
                     fontsize=12,
                     ha='center',
@@ -71,8 +71,8 @@ def mostrar_graficas_2d(f_expr, a, b, mostrar_area=True, eje='x', g_expr=None, m
 
     plt.tight_layout()
     plt.show()
-# --- Visualización 3D entre dos funciones eje X o Y ---
-def mostrar_volumen_entre_funciones_3d(f_expr, g_expr, a, b, eje='x'):
+#mostrar volumen de una funcion       
+def mostrar_volumen_entre_funciones_3d(f_expr, g_expr, a, b, eje='x', mensaje_volumen=None, legend=None):
     theta = np.linspace(0, 2 * np.pi, 100)
     vals = np.linspace(float(a), float(b), 100)
     var = x if eje == 'x' else y
@@ -83,26 +83,23 @@ def mostrar_volumen_entre_funciones_3d(f_expr, g_expr, a, b, eje='x'):
     f_grid, _ = np.meshgrid(f_vals, theta)
     g_grid, _ = np.meshgrid(g_vals, theta)
 
+    fig = plt.figure(figsize=(10, 6))
+    ax = fig.add_subplot(111, projection='3d')
+
     if eje == 'x':
         X = grid
         Y_outer = f_grid * np.cos(theta_grid)
         Z_outer = f_grid * np.sin(theta_grid)
         Y_inner = g_grid * np.cos(theta_grid)
         Z_inner = g_grid * np.sin(theta_grid)
+        ax.plot_surface(X, Y_outer, Z_outer, color='pink', alpha=0.7)
+        ax.plot_surface(X, Y_inner, Z_inner, color='yellow', alpha=1.0, edgecolor='none')
     else:
         Y = grid
         X_outer = f_grid * np.cos(theta_grid)
         Z_outer = f_grid * np.sin(theta_grid)
         X_inner = g_grid * np.cos(theta_grid)
         Z_inner = g_grid * np.sin(theta_grid)
-
-    fig = plt.figure(figsize=(10, 6))
-    ax = fig.add_subplot(111, projection='3d')
-
-    if eje == 'x':
-        ax.plot_surface(X, Y_outer, Z_outer, color='pink', alpha=0.7)
-        ax.plot_surface(X, Y_inner, Z_inner, color='yellow', alpha=1.0, edgecolor='none')
-    else:
         ax.plot_surface(X_outer, Y, Z_outer, color='pink', alpha=0.7)
         ax.plot_surface(X_inner, Y, Z_inner, color='yellow', alpha=1.0, edgecolor='none')
 
@@ -110,11 +107,21 @@ def mostrar_volumen_entre_funciones_3d(f_expr, g_expr, a, b, eje='x'):
     ax.set_xlabel("x")
     ax.set_ylabel("y")
     ax.set_zlabel("z")
+
+    # Mostrar mensaje del volumen dentro de la figura 3D
+    if mensaje_volumen:
+     texto_funciones = f"$f({eje}) = {latex(f_expr)}$\n$g({eje}) = {latex(g_expr)}$\n{mensaje_volumen}"
+    ax.text2D(0.05, 0.05, texto_funciones,
+              transform=ax.transAxes,
+              ha='left',
+              fontsize=12,
+              bbox=dict(boxstyle="round", facecolor="white", edgecolor="black"))
     plt.tight_layout()
     plt.show()
 
+
 # --- Visualización 3D de una sola función ---
-def mostrar_volumen_3d(f_expr, a, b, eje='x'):
+def mostrar_volumen_3d(f_expr, a, b, eje='x', mensaje_volumen1=None):
     theta = np.linspace(0, 2 * np.pi, 100)
     var = x if eje == 'x' else y
 
@@ -145,5 +152,15 @@ def mostrar_volumen_3d(f_expr, a, b, eje='x'):
     ax.set_xlabel("x")
     ax.set_ylabel("y")
     ax.set_zlabel("z")
+
+    #  Mostrar mensaje si se proporciona
+    if mensaje_volumen1:
+     texto_funciones = fr"$f({eje}) = {latex(f_expr)}$" + "\n" + mensaje_volumen1
+    ax.text2D(0.05, 0.05, texto_funciones,
+              transform=ax.transAxes,
+              ha='left',
+              fontsize=12,
+              bbox=dict(boxstyle="round", facecolor="white", edgecolor="black"))
+
     plt.tight_layout()
     plt.show()
