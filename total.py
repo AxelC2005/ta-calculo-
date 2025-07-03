@@ -63,7 +63,7 @@ def mostrar_graficas_2d(f_expr, a, b, mostrar_area=True, eje='x', g_expr=None, m
 
     # 👇 Mostrar el mensaje en la parte inferior del gráfico
     if mensaje_area:
-        axs[1].text(0.5, 0.05, mensaje_area,
+        axs[1].text(0.0, 0.01, mensaje_area,
                     transform=axs[1].transAxes,
                     fontsize=12,
                     ha='center',
@@ -111,7 +111,7 @@ def mostrar_volumen_entre_funciones_3d(f_expr, g_expr, a, b, eje='x', mensaje_vo
     # Mostrar mensaje del volumen dentro de la figura 3D
     if mensaje_volumen:
      texto_funciones = f"$f({eje}) = {latex(f_expr)}$\n$g({eje}) = {latex(g_expr)}$\n{mensaje_volumen}"
-    ax.text2D(0.05, 0.05, texto_funciones,
+    ax.text2D(0.0, 0.01, texto_funciones,
               transform=ax.transAxes,
               ha='left',
               fontsize=12,
@@ -156,7 +156,7 @@ def mostrar_volumen_3d(f_expr, a, b, eje='x', mensaje_volumen1=None):
     #  Mostrar mensaje si se proporciona
     if mensaje_volumen1:
      texto_funciones = fr"$f({eje}) = {latex(f_expr)}$" + "\n" + mensaje_volumen1
-    ax.text2D(0.05, 0.05, texto_funciones,
+    ax.text2D(0.0, 0.01, texto_funciones,
               transform=ax.transAxes,
               ha='left',
               fontsize=12,
